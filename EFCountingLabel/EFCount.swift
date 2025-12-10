@@ -68,6 +68,8 @@ public class EFCounter {
     private var currentDuration: TimeInterval = 0
     public private(set) var totalDuration: TimeInterval = 1
     private var lastUpdate: TimeInterval = 0
+
+    public var initialValue: CGFloat = 0
     
     private var timer: CADisplayLink?
     
@@ -82,7 +84,7 @@ public class EFCounter {
     
     public var currentValue: CGFloat {
         if currentDuration == 0 {
-            return 0
+            return initialValue
         } else if currentDuration >= totalDuration {
             return toValue
         }
@@ -126,6 +128,7 @@ public class EFCounter {
         currentDuration = 0
         lastUpdate = 0
         totalDuration = 1
+        initialValue = 0
     }
     
     public func invalidate() {
@@ -142,6 +145,14 @@ public class EFCounter {
 }
 
 extension EFCounter: EFCount {
+    public func setInitialValue(_ value: CGFloat, update: Bool = true) {
+        reset()
+        initialValue = value
+        if update {
+            updateBlock?(value)
+        }
+    }
+    
     public func countFromCurrentValueTo(_ endValue: CGFloat, withDuration duration: TimeInterval) {
         countFrom(currentValue, to: endValue, withDuration: duration)
     }
