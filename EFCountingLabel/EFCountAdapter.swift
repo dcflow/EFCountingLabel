@@ -135,6 +135,14 @@ open class EFCountingButton: UIButton, EFCountAdapter {
     }
 }
 
+extension EFCountAdapter {
+    /// Sets the current value of the counter without animation,
+    /// so that future `countFromCurrentValueTo` calls start from here.
+    public func setCurrentValue(_ value: CGFloat, update: Bool = true) {
+        counter.setInitialValue(value, update: update)
+    }
+}
+
 @MainActor
 open class EFCountingLabel: UILabel, EFCountAdapter {
     public private(set) var counter = EFCounter()
