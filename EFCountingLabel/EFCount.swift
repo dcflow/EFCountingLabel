@@ -100,14 +100,16 @@ public class EFCounter {
         let now = CACurrentMediaTime()
         currentDuration += now - lastUpdate
         lastUpdate = now
-        
+
         if currentDuration >= totalDuration {
             invalidate()
             currentDuration = totalDuration
+
+            initialValue = toValue
         }
-        
+
         updateBlock?(currentValue)
-        
+
         if currentDuration == totalDuration {
             runCompletionBlock()
         }
@@ -165,7 +167,7 @@ extension EFCounter: EFCount {
         invalidate()
         
         if duration == 0.0 {
-            // No animation
+            initialValue = endValue
             updateBlock?(endValue)
             runCompletionBlock()
             return
@@ -187,7 +189,11 @@ extension EFCounter: EFCount {
     }
     
     public func stopCountAtCurrentValue() {
+        let value = currentValue
         invalidate()
-        updateBlock?(currentValue)
+
+        initialValue = value
+
+        updateBlock?(value)
     }
 }
